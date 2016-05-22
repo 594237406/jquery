@@ -488,7 +488,6 @@ jQuery.extend({
 	// context (optional): If specified, the fragment will be created in this context, defaults to document
 	// keepScripts (optional): If true, will include scripts passed in the html string
 	parseHTML: function( data, context, keepScripts ) {
-		debugger;
 		if ( !data || typeof data !== "string" ) {          //如果传入不是字符串,返回null
 			return null;
 		}
@@ -3216,7 +3215,6 @@ jQuery.extend({
 			resolveContexts = new Array( length );
 			for ( ; i < length; i++ ) {              //循环函数
 				if ( resolveValues[ i ] && jQuery.isFunction( resolveValues[ i ].promise ) ) {    //如果函数是是promise对象
-					debugger;
 					resolveValues[ i ].promise()                                                  //执行promise
 						.done( updateFunc( i, resolveContexts, resolveValues ) )
 						.fail( deferred.reject )                                                  //如果任意返回reject,整体返回reject
@@ -3243,7 +3241,7 @@ jQuery.support = (function( support ) {
 		opt = select.appendChild( document.createElement("option") );
 
 	// Finish early in limited environments
-	if ( !input.type ) {
+	if ( !input.type ) {    //没什么作用,全有type
 		return support;
 	}
 
@@ -3251,33 +3249,33 @@ jQuery.support = (function( support ) {
 
 	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
 	// Check the default checkbox/radio value ("" on old WebKit; "on" elsewhere)
-	support.checkOn = input.value !== "";
+	support.checkOn = input.value !== "";   //判断input.value是否有value值为on
 
 	// Must access the parent to make an option select properly
-	// Support: IE9, IE10
-	support.optSelected = opt.selected;
+	// Support: IE9, IE10 : 此处Support代表不支持
+	support.optSelected = opt.selected;     //IE9,10下默认第一个子项未选中
 
 	// Will be defined later
-	support.reliableMarginRight = true;
+	support.reliableMarginRight = true;     //稍后赋值
 	support.boxSizingReliable = true;
 	support.pixelPosition = false;
 
 	// Make sure checked status is properly cloned
 	// Support: IE9, IE10
 	input.checked = true;
-	support.noCloneChecked = input.cloneNode( true ).checked;
+	support.noCloneChecked = input.cloneNode( true ).checked; //判断拷贝元素有没有checked
 
 	// Make sure that the options inside disabled selects aren't marked as disabled
 	// (WebKit marks them as disabled)
 	select.disabled = true;
-	support.optDisabled = !opt.disabled;
+	support.optDisabled = !opt.disabled;       //全部返回false
 
 	// Check if an input maintains its value after becoming a radio
 	// Support: IE9, IE10
 	input = document.createElement("input");
 	input.value = "t";
 	input.type = "radio";
-	support.radioValue = input.value === "t";
+	support.radioValue = input.value === "t";       //判断radio支持不支持value
 
 	// #11217 - WebKit loses check when the name is after the checked attribute
 	input.setAttribute( "checked", "t" );
@@ -3287,14 +3285,18 @@ jQuery.support = (function( support ) {
 
 	// Support: Safari 5.1, Android 4.x, Android 2.3
 	// old WebKit doesn't clone checked state correctly in fragments
+	//判断克隆文档碎片,checked有没有值
 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
 	// Support: Firefox, Chrome, Safari
 	// Beware of CSP restrictions (https://developer.mozilla.org/en/Security/CSP)
+	//是否支持onfocsin
 	support.focusinBubbles = "onfocusin" in window;
 
+	// Support:IE0, IE10
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
+	//判断克隆对象是否影响原先对象样式
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
 	// Run tests that need a body at doc ready
@@ -3304,7 +3306,7 @@ jQuery.support = (function( support ) {
 			divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box",
 			body = document.getElementsByTagName("body")[ 0 ];
 
-		if ( !body ) {
+		if ( !body ) {                                   //如果不包含body的window,直接返回
 			// Return for frameset docs that don't have a body
 			return;
 		}
@@ -3316,17 +3318,21 @@ jQuery.support = (function( support ) {
 		body.appendChild( container ).appendChild( div );
 		div.innerHTML = "";
 		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
-		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%";
+		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:1px;" +
+			"border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%";
 
 		// Workaround failing boxSizing test due to offsetWidth returning wrong value
 		// with some non-1 values of body zoom, ticket #13543
 		jQuery.swap( body, body.style.zoom != null ? { zoom: 1 } : {}, function() {
-			support.boxSizing = div.offsetWidth === 4;
+			support.boxSizing = div.offsetWidth === 4;   //判断支不支持boxSizing,如果div的宽度=设置宽度,并且有padding情况下,返回true
 		});
 
 		// Use window.getComputedStyle because jsdom on node.js will break without it.
+		//如果支持computedStyle
 		if ( window.getComputedStyle ) {
+			//是否支持像素,如果设置top,获得的computedStype还是设置top而没有转像素,不支持
 			support.pixelPosition = ( window.getComputedStyle( div, null ) || {} ).top !== "1%";
+			//boxSizing是否可靠
 			support.boxSizingReliable = ( window.getComputedStyle( div, null ) || { width: "4px" } ).width === "4px";
 
 			// Support: Android 2.3
@@ -3338,6 +3344,7 @@ jQuery.support = (function( support ) {
 			marginDiv.style.marginRight = marginDiv.style.width = "0";
 			div.style.width = "1px";
 
+			//margin是否可靠,如果设置为0,判断是否存在值为0的marginRight属性
 			support.reliableMarginRight =
 				!parseFloat( ( window.getComputedStyle( marginDiv, null ) || {} ).marginRight );
 		}
@@ -3367,16 +3374,17 @@ function Data() {
 	// Support: Android < 4,
 	// Old WebKit does not have Object.preventExtensions/freeze method,
 	// return new empty object instead with no [[set]] accessor
-	Object.defineProperty( this.cache = {}, 0, {
+	Object.defineProperty( this.cache = {}, 0, {    //给this.cache设置0:只有get方法,因为没有set方法,所以不能设置修改
 		get: function() {
-			return {};
+			return {};                       //设置一个空json
 		}
 	});
 
-	this.expando = jQuery.expando + Math.random();
+	//设置随机数
+	this.expando = jQuery.expando + Math.random();   //增加属性
 }
 
-Data.uid = 1;
+Data.uid = 1;    //cache的key累加数字,每个元素会累加一次
 
 Data.accepts = function( owner ) {
 	// Accepts only:
@@ -3385,6 +3393,7 @@ Data.accepts = function( owner ) {
 	//    - Node.DOCUMENT_NODE
 	//  - Object
 	//    - Any
+	//只有元素或者文档才能分配属性
 	return owner.nodeType ?
 		owner.nodeType === 1 || owner.nodeType === 9 : true;
 };
@@ -3394,37 +3403,37 @@ Data.prototype = {
 		// We can accept data for non-element nodes in modern browsers,
 		// but we should not, see #8335.
 		// Always return the key for a frozen object.
-		if ( !Data.accepts( owner ) ) {
+		if ( !Data.accepts( owner ) ) {     //如果不是元素与文档,如text,属性等,返回0,0对应空json
 			return 0;
 		}
 
 		var descriptor = {},
 			// Check if the owner object already has a cache key
-			unlock = owner[ this.expando ];
+			unlock = owner[ this.expando ];       //判断owner是否有this.expando属性
 
 		// If not, create one
 		if ( !unlock ) {
-			unlock = Data.uid++;
+			unlock = Data.uid++;                       //获得数字
 
 			// Secure it in a non-enumerable, non-writable property
 			try {
-				descriptor[ this.expando ] = { value: unlock };
-				Object.defineProperties( owner, descriptor );
+				descriptor[ this.expando ] = { value: unlock };      //{}.jQueryxxx={value:数字}
+				Object.defineProperties( owner, descriptor );        //元素添加属性jQueryxxx,只能获取,不能修改
 
 			// Support: Android < 4
 			// Fallback to a less secure definition
-			} catch ( e ) {
-				descriptor[ this.expando ] = unlock;
+			} catch ( e ) {                                          //如果不支持defineProperties
+				descriptor[ this.expando ] = unlock;                 //元素添加属性jQueryxxx,只能获取,不能修改
 				jQuery.extend( owner, descriptor );
 			}
 		}
 
 		// Ensure the cache object
-		if ( !this.cache[ unlock ] ) {
+		if ( !this.cache[ unlock ] ) {                               //设置cache的uid键空{}
 			this.cache[ unlock ] = {};
 		}
 
-		return unlock;
+		return unlock;                                               //返回键
 	},
 	set: function( owner, data, value ) {
 		var prop,
@@ -3436,16 +3445,16 @@ Data.prototype = {
 
 		// Handle: [ owner, key, value ] args
 		if ( typeof data === "string" ) {
-			cache[ data ] = value;
+			cache[ data ] = value;                       //如果是字符串,直接赋值
 
 		// Handle: [ owner, { properties } ] args
-		} else {
+		} else {                                         //如果是对象
 			// Fresh assignments by object are shallow copied
-			if ( jQuery.isEmptyObject( cache ) ) {
+			if ( jQuery.isEmptyObject( cache ) ) {       //如果cache为空,把data赋给this.cache[unlock]
 				jQuery.extend( this.cache[ unlock ], data );
 			// Otherwise, copy the properties one-by-one to the cache object
 			} else {
-				for ( prop in data ) {
+				for ( prop in data ) {                   //如果不是空,遍历data赋给cache
 					cache[ prop ] = data[ prop ];
 				}
 			}
@@ -3457,9 +3466,9 @@ Data.prototype = {
 		// New caches will be created and the unlock returned,
 		// allowing direct access to the newly created
 		// empty data object. A valid owner object must be provided.
-		var cache = this.cache[ this.key( owner ) ];
+		var cache = this.cache[ this.key( owner ) ];     //获得当前元素cache
 
-		return key === undefined ?
+		return key === undefined ?                       //如果没有传递key,返回所有属性,如果传递,返回一个属性
 			cache : cache[ key ];
 	},
 	access: function( owner, key, value ) {
@@ -3474,14 +3483,14 @@ Data.prototype = {
 		//
 		//   1. The entire cache object
 		//   2. The data stored at the key
-		//
+		//如果没有传入key或者只传入key没有value
 		if ( key === undefined ||
 				((key && typeof key === "string") && value === undefined) ) {
 
 			stored = this.get( owner, key );
 
 			return stored !== undefined ?
-				stored : this.get( owner, jQuery.camelCase(key) );
+				stored : this.get( owner, jQuery.camelCase(key) );//驼峰匹配方法,如果传入的是a-b,查找aB
 		}
 
 		// [*]When the key is not a string, or both a key and value
@@ -3490,56 +3499,58 @@ Data.prototype = {
 		//   1. An object of properties
 		//   2. A key and value
 		//
-		this.set( owner, key, value );
+		this.set( owner, key, value );             //调用set设置属性
 
 		// Since the "set" path can have two possible entry points
 		// return the expected data based on which path was taken[*]
-		return value !== undefined ? value : key;
+
+		return value !== undefined ? value : key;     //如果有value,返回value否则返回key
 	},
 	remove: function( owner, key ) {
 		var i, name, camel,
-			unlock = this.key( owner ),
-			cache = this.cache[ unlock ];
+			unlock = this.key( owner ),             //获得cache键
+			cache = this.cache[ unlock ];           //获得当前元素缓存
 
-		if ( key === undefined ) {
-			this.cache[ unlock ] = {};
+		if ( key === undefined ) {                  //如果没有指定键名
+			this.cache[ unlock ] = {};              //清空所有
 
 		} else {
 			// Support array or space separated string of keys
-			if ( jQuery.isArray( key ) ) {
+			if ( jQuery.isArray( key ) ) {          //如果key是数组
 				// If "name" is an array of keys...
 				// When data is initially created, via ("key", "val") signature,
 				// keys will be converted to camelCase.
 				// Since there is no way to tell _how_ a key was added, remove
 				// both plain key and camelCase key. #12786
 				// This will only penalize the array argument path.
+				//数组拼接,数组内的对象转成驼峰命名法,如["a-b", "c-d"]转成["a-b", "c-d", "aB", "cD"]
 				name = key.concat( key.map( jQuery.camelCase ) );
 			} else {
 				camel = jQuery.camelCase( key );
 				// Try the string as a key before any manipulation
-				if ( key in cache ) {
+				if ( key in cache ) {                 //如果缓存中有key,name=["a-b","aB"]
 					name = [ key, camel ];
 				} else {
 					// If a key with the spaces exists, use it.
 					// Otherwise, create an array by matching non-whitespace
-					name = camel;
+					name = camel;                     //如果缓存中有key,name=["a-b"]
 					name = name in cache ?
 						[ name ] : ( name.match( core_rnotwhite ) || [] );
 				}
 			}
 
 			i = name.length;
-			while ( i-- ) {
+			while ( i-- ) {                            //依次删除缓存中的key
 				delete cache[ name[ i ] ];
 			}
 		}
 	},
 	hasData: function( owner ) {
-		return !jQuery.isEmptyObject(
+		return !jQuery.isEmptyObject(                    //判断缓存中是否含有当前元素
 			this.cache[ owner[ this.expando ] ] || {}
 		);
 	},
-	discard: function( owner ) {
+	discard: function( owner ) {                         //从缓存中删除当前元素
 		if ( owner[ this.expando ] ) {
 			delete this.cache[ owner[ this.expando ] ];
 		}
@@ -3550,7 +3561,9 @@ Data.prototype = {
 data_user = new Data();
 data_priv = new Data();
 
-
+/*
+* 调用原生api
+* */
 jQuery.extend({
 	acceptData: Data.accepts,
 
@@ -3580,40 +3593,40 @@ jQuery.extend({
 jQuery.fn.extend({
 	data: function( key, value ) {
 		var attrs, name,
-			elem = this[ 0 ],
+			elem = this[ 0 ],    //返回第一个元素
 			i = 0,
 			data = null;
 
 		// Gets all values
-		if ( key === undefined ) {
-			if ( this.length ) {
-				data = data_user.get( elem );
+		if ( key === undefined ) {            //如果没有传入key,返回所有
+			if ( this.length ) {              //如果有元素,返回data,否则返回null
+				data = data_user.get( elem );   //获得元素data
 
-				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {
-					attrs = elem.attributes;
+				if ( elem.nodeType === 1 && !data_priv.get( elem, "hasDataAttrs" ) ) {   //如果是自定义属性
+					attrs = elem.attributes;            //获得元素所有属性,包括自定义属性
 					for ( ; i < attrs.length; i++ ) {
-						name = attrs[ i ].name;
+						name = attrs[ i ].name;                         //获得属性名,属性值由value获取
 
-						if ( name.indexOf( "data-" ) === 0 ) {
-							name = jQuery.camelCase( name.slice(5) );
+						if ( name.indexOf( "data-" ) === 0 ) {          //如果有data-开头的属性
+							name = jQuery.camelCase( name.slice(5) );   //属性名去掉data-后面部分转成驼峰命名
 							dataAttr( elem, name, data[ name ] );
 						}
 					}
-					data_priv.set( elem, "hasDataAttrs", true );
+					data_priv.set( elem, "hasDataAttrs", true );        //设置自定义data-属性缓存的属性特征,下次不再走这部分代码
 				}
 			}
 
-			return data;
+			return data;                                                //返回查询缓存或者设置缓存
 		}
 
 		// Sets multiple values
-		if ( typeof key === "object" ) {
+		if ( typeof key === "object" ) {                          //如果key是object,调用set:object函数
 			return this.each(function() {
 				data_user.set( this, key );
 			});
 		}
 
-		return jQuery.access( this, function( value ) {
+		return jQuery.access( this, function() {              //如果传入一个参数
 			var data,
 				camelKey = jQuery.camelCase( key );
 
@@ -3622,55 +3635,57 @@ jQuery.fn.extend({
 			// `value` parameter was not undefined. An empty jQuery object
 			// will result in `undefined` for elem = this[ 0 ] which will
 			// throw an exception if an attempt to read a data cache is made.
-			if ( elem && value === undefined ) {
+			if ( elem && value === undefined ) {             //如果没有value
 				// Attempt to get data from the cache
 				// with the key as-is
-				data = data_user.get( elem, key );
+				data = data_user.get( elem, key );            //获得data返回
 				if ( data !== undefined ) {
 					return data;
 				}
 
 				// Attempt to get data from the cache
 				// with the key camelized
-				data = data_user.get( elem, camelKey );
+				data = data_user.get( elem, camelKey );       //获得驼峰,返回
 				if ( data !== undefined ) {
 					return data;
 				}
 
 				// Attempt to "discover" the data in
 				// HTML5 custom data-* attrs
-				data = dataAttr( elem, camelKey, undefined );
+				data = dataAttr( elem, camelKey, undefined ); //找h5 data-* 的值,返回
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				// We tried really hard, but the data doesn't exist.
+				// We tried really hard, but the data doesn't exist.   //如果都没找到,返回undefined
 				return;
 			}
 
 			// Set the data...
-			this.each(function() {
+			this.each(function() {                               //循环设置
 				// First, attempt to store a copy or reference of any
 				// data that might've been store with a camelCased key.
-				var data = data_user.get( this, camelKey );
+				var data = data_user.get( this, camelKey );      //根据驼峰获得数据
 
 				// For HTML5 data-* attribute interop, we have to
 				// store property names with dashes in a camelCase form.
 				// This might not apply to all properties...*
-				data_user.set( this, camelKey, value );
+				data_user.set( this, camelKey, value );          //设置缓存数据
 
 				// *... In the case of properties that might _actually_
 				// have dashes, we need to also store a copy of that
 				// unchanged property.
 				if ( key.indexOf("-") !== -1 && data !== undefined ) {
-					data_user.set( this, key, value );
+					data_user.set( this, key, value );          //设置非驼峰缓存数据
 				}
 			});
-		}, null, value, arguments.length > 1, null, true );
+		},
+		//null,因为key,value已经传入
+			null, null, arguments.length > 1, null, true );
 	},
 
 	removeData: function( key ) {
-		return this.each(function() {
+		return this.each(function() {           //遍历元素数组,删除
 			data_user.remove( this, key );
 		});
 	}
@@ -3681,24 +3696,25 @@ function dataAttr( elem, key, data ) {
 
 	// If nothing was found internally, try to fetch any
 	// data from the HTML5 data-* attribute
+	// 如果没有找到原生的,找html5 的data-*属性,比如有 lhj属性,就不会查找 data-lhj属性
 	if ( data === undefined && elem.nodeType === 1 ) {
-		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
-		data = elem.getAttribute( name );
+		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();     //匹配第一个大写转成小写,还原属性,比如dataLhj转正data-lhj
+		data = elem.getAttribute( name );                                    //获得data属性
 
 		if ( typeof data === "string" ) {
 			try {
-				data = data === "true" ? true :
+				data = data === "true" ? true :                         	 //如果data是true,false,null字符串转成true,false,null
 					data === "false" ? false :
 					data === "null" ? null :
 					// Only convert to a number if it doesn't change the string
-					+data + "" === data ? +data :
-					rbrace.test( data ) ? JSON.parse( data ) :
-					data;
+					+data + "" === data ? +data :  							 //如果是数字,返回数字
+					rbrace.test( data ) ? JSON.parse( data ) :               //是json字符串,转成json
+					data;                                                    //剩下直接返回data
 			} catch( e ) {}
 
 			// Make sure we set the data so it isn't changed later
-			data_user.set( elem, key, data );
-		} else {
+			data_user.set( elem, key, data );                                //设置缓存
+		} else {                                                        //如果属性不是string返回undefined
 			data = undefined;
 		}
 	}
@@ -3849,6 +3865,7 @@ jQuery.fn.extend({
 		return defer.promise( obj );
 	}
 });
+
 var nodeHook, boolHook,
 	rclass = /[\t\r\n\f]/g,
 	rreturn = /\r/g,

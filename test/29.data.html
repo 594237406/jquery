@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>无标题文档</title>
+	<script src="../jquery.js"></script>
+</head>
+
+<body>
+<input type="radio" />
+<div />
+</body>
+<script>
+	var radio=$('input');
+	var div=$('div');
+	$.data(radio,'name','lhj');
+	$.data(div,'age');
+	$.data(div, 'name',{
+		a:1,b:2
+	});
+
+
+
+
+	console.log($.data(radio))
+	console.log($.data(div))
+
+
+
+</script>
+</html>

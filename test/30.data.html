@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>无标题文档</title>
+	<script src="../jquery.js"></script>
+</head>
+
+<body>
+<input type="radio" />
+<div />
+</body>
+<script>
+	var radio=$('input');
+
+//	$.data(radio,'age','18');    //此种方法设置不会生效
+
+	radio.data("name","lhj");
+	console.log(radio.data('name'));
+
+
+
+</script>
+</html>

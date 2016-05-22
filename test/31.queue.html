@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>无标题文档</title>
+	<script src="../jquery.js"></script>
+	<style>
+		div{
+			width: 100px;
+			height: 100px;
+			background: #ccc;
+			position: absolute;
+		}
+	</style>
+</head>
+
+<body>
+<div/>
+</body>
+<script>
+
+	 //队列可以用回调代替,但是队列更灵活
+	 $('div').animate({width:200},2000).queue("fx",function(){
+		 //可控制出队
+		 $(this).dequeue();
+	 }).animate({left:200},2000);
+
+</script>
+</html>
